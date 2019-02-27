@@ -18,16 +18,16 @@ class NeuralNetwork():
 
         self.output_error = y.T - output
         self.output_delta = self.output_error * sigmoid_derivative(output)
-
         self.z2_error = self.output_delta.dot(self.output_layer.weights.T)
         self.z2_delta = self.z2_error*sigmoid_derivative(self.z)
+
 
         # self.z_error = self.z2_delta.dot(self.hidden_layer_1.weights.T)
         # self.z_delta = self.z_error*sigmoid_derivative(self.z)
 
-        self.hidden_layer_1.weights += X.T.dot(self.z2_delta)
+        self.hidden_layer_1.weights += 0.01 * X.T.dot(self.z2_delta)
         # self.hidden_layer_2.weights += self.z.T.dot(self.z2_delta)
-        self.output_layer.weights += self.z.T.dot(self.output_delta)
+        self.output_layer.weights += 0.01 * self.z.T.dot(self.output_delta)
 
 
     def train(self, X,y):
