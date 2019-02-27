@@ -13,14 +13,13 @@ class HiddenLayer():
 
     def forward(self,x):
         # Forward pass is inputs times weights passed through activation function
-
-        self.output = self.activation_function(np.dot(x,self.weights) + self.bias)
+        self.output = self.activation_function(np.dot(x,self.weights) + self.bias) # 
         return self.output
 
     def backward(self, output, gradients_next_layer, weights_next_layer):
         error = gradients_next_layer.dot(weights_next_layer.T)
         delta = error*self.activation_function(output, derivative =True)
-        return error, delta
+        return delta
 
 class InputLayer():
     def __init__(self, size):
@@ -37,10 +36,10 @@ class OutputLayer():
         self.bias = np.random.uniform(size=(1, self.out_size))
 
     def forward(self, x):
-        self.output = self.activation_function(np.dot(x,self.weights) + self.bias)
+        self.output = self.activation_function(np.dot(x,self.weights)+ self.bias ) #
         return self.output
 
     def backward(self, output, y):
-        error = y.T - output
+        error = y - output
         delta = error * self.activation_function(output, derivative = True)
-        return error, delta
+        return delta
