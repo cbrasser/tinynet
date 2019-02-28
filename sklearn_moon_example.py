@@ -18,7 +18,7 @@ accs = np.zeros(n_runs)
 
 for k in range(n_runs):
     print(f'Run nr - {k+1}')
-    nn = NeuralNetwork(2,1, learning_rate = 0.1)
+    nn = NeuralNetwork(2,1, activation = 'sigmoid', learning_rate = 0.1)
     print(f'Training')
     nn.sgd_minibatch(X_train, y_train, minibatch_size, n_epochs)
 

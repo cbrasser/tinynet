@@ -3,23 +3,22 @@ import numpy as np
 from sklearn.utils import shuffle
 
 class NeuralNetwork():
-    def __init__(self, input_size, output_size,num_hidden = 1, hidden_layer_size = 3, learning_rate = 0.01):
+    def __init__(self, input_size, output_size, activation, num_hidden = 1, hidden_layer_size = 3, learning_rate = 0.01):
         self.input_layer = InputLayer(input_size)
-        # self.hidden_layer_1 = HiddenLayer(input_size,hidden_layer_size, 'relu')
-        self.hidden_layer = HiddenLayer(input_size,hidden_layer_size, 'sigmoid')
-        self.output_layer = OutputLayer(hidden_layer_size, output_size, 'sigmoid')
+        self.hidden_layer = HiddenLayer(input_size,hidden_layer_size, activation)
+        self.output_layer = OutputLayer(hidden_layer_size, output_size, activation)
         self.lr = learning_rate
 
 
     # Forward pass through the neural network
     def forward(self, X):
-        # self.z = self.hidden_layer_1.forward(X)
-        self.z = self.hidden_layer.forward(X) #z2
-        self.output = self.output_layer.forward(self.z)     # output
+        self.z = self.hidden_layer.forward(X)
+        self.output = self.output_layer.forward(self.z)
 
     def predict(self, X):
-        h = self.hidden_layer.forward(X) #z2
+        h = self.hidden_layer.forward(X)
         return self.output_layer.forward(h)
+
     '''
     Backpropagation to find the partial derivatives by applying the chain-rule. Needs training
     samples X, corresponding gold truth labels y, and the predictions from the forward pass (output).
@@ -39,12 +38,9 @@ class NeuralNetwork():
 
     def sgd_minibatch(self, X_train, y_train, minibatch_size, n_epochs):
         for epoch in range(n_epochs):
-
-            # TODO: Randomize data point & take care of dimensions of y
-
             if y_train.shape[0]  == 1:
                 y_train = y_train.T
-            # X_train, y_train = shuffle(X_train, y_train.T)
+            X_train, y_train = shuffle(X_train, y_train)
 
             for i in range(0, X_train.shape[0], minibatch_size):
                 # Get pair of (X, y) of the current minibatch/chunk
@@ -55,6 +51,9 @@ class NeuralNetwork():
                 self.backprop(X_train_mini,y_train_mini.T)
 
     def sgd(self, X_train, y_train, n_epochs):
+
+        X_train, y_train = shuffle(X_train, y_train)
+
         for epoch in range(n_epochs):
             # lmao wtf was i thinking hahahaha, literally cost me 2 hours
             # np.random.shuffle(X_train)
