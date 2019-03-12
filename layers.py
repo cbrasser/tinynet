@@ -13,7 +13,7 @@ class HiddenLayer():
 
     def forward(self,x):
         # Forward pass is inputs times weights passed through activation function
-        self.output = self.activation_function(np.dot(x,self.weights) + self.bias) # 
+        self.output = self.activation_function(np.dot(x,self.weights) + self.bias) #
         return self.output
 
     def backward(self, output, gradients_next_layer, weights_next_layer):

@@ -3,10 +3,10 @@ import numpy as np
 from sklearn.utils import shuffle
 
 class NeuralNetwork():
-    def __init__(self, input_size, output_size, activation, num_hidden = 1, hidden_layer_size = 3, learning_rate = 0.01):
+    def __init__(self, input_size, output_size, activation_hidden, activation_out, num_hidden = 1, hidden_layer_size = 3, learning_rate = 0.01):
         self.input_layer = InputLayer(input_size)
-        self.hidden_layer = HiddenLayer(input_size,hidden_layer_size, activation)
-        self.output_layer = OutputLayer(hidden_layer_size, output_size, activation)
+        self.hidden_layer = HiddenLayer(input_size,hidden_layer_size, activation_hidden)
+        self.output_layer = OutputLayer(hidden_layer_size, output_size, activation_out)
         self.lr = learning_rate
 
 
@@ -38,6 +38,7 @@ class NeuralNetwork():
 
     def sgd_minibatch(self, X_train, y_train, minibatch_size, n_epochs):
         for epoch in range(n_epochs):
+            print(f'------------------epoch {epoch} ---------------------')
             if y_train.shape[0]  == 1:
                 y_train = y_train.T
             X_train, y_train = shuffle(X_train, y_train)

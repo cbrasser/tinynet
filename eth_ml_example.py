@@ -5,12 +5,24 @@ from sklearn.datasets import make_moons
 from sklearn.model_selection import train_test_split
 
 
-X, y = make_moons(n_samples=5000, random_state=42, noise=0)
-X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=42)
-y_train = np.asarray([y_train])
-y_test = np.asarray([y_test])
+df_train = pd.read_csv('data/train.csv')
+df_test = pd.read_csv('data/test.csv')
+df_sample = pd.read_csv('data/sample.csv')
 
-print(X_train.shape)
+# Training data
+df_train_X = df_train.loc[:,'x1':'x10']
+df_train_Y = df_train.loc[:,'y']
+
+# Testing data
+df_test_X = df_test.loc[:,'x1':'x10']
+df_test_Y = df_sample.loc[:,'y']
+
+# Convert to numpy arrays, because fast
+X_train = np.asarray(df_train_X)
+y_train = np.asarray([df_train_Y])
+
+X_test = np.asarray(df_test_X)
+y_test = np.asarray([df_test_Y])
 
 n_epochs = 500
 minibatch_size = 10
@@ -20,7 +32,7 @@ accs = np.zeros(n_runs)
 
 for k in range(n_runs):
     print(f'Run nr - {k+1}')
-    nn = NeuralNetwork(2,1, activation = 'sigmoid', learning_rate = 0.1)
+    nn = NeuralNetwork(10,1, activation = 'relu', learning_rate = 0.1)
     print(f'Training')
     nn.sgd_minibatch(X_train, y_train, minibatch_size, n_epochs)
 
@@ -28,11 +40,11 @@ for k in range(n_runs):
     print(f'Testing')
     for i, x in enumerate(X_test):
         score = nn.predict(x)
-        prediction = 1 if score >=0.5 else 0
+        print(f'prediction: {score} - true: {y_test[0,i]}')
         # print(f'pred: {prediction} - true: {y_test[0,i]}')
-        predictions[i] = prediction
+        predictions[i] = score
 
-    accuracy = (predictions == y_test).sum() / y_test.size
+    accuracy = (np.abs(predictions - y_test)).sum() / y_test.size
     print(f'Accuracy - {accuracy}')
     if n_runs > 1:
         accs[k] = accuracy

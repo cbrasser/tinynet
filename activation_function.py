@@ -28,3 +28,9 @@ def sigmoid(x, derivative = False):
         return x * (1.0 - x)
     else:
         return 1 / (1 + np.exp(-x))
+
+def no_activation(x, derivative = False):
+    if derivative:
+        return 1
+    else:
+        return x
